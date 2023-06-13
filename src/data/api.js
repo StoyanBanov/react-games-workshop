@@ -1,15 +1,19 @@
 const host = 'http://localhost:3030'
 
+export const tokenValue = {
+    token: null
+}
+
 async function request(method, url, body) {
     const options = {
         method,
         headers: {}
     }
     if (body) {
-        options.headers['Content-Type'] = 'application/json'
+
         options.body = JSON.stringify(body)
     }
-
+    if (tokenValue.token) options.headers['X-Authorization'] = tokenValue.token
     try {
         const res = await fetch(host + url, options)
 

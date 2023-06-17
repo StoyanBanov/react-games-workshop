@@ -25,7 +25,7 @@ export const Register = ({ user, setUser }) => {
 
     async function submitHandler(e) {
         e.preventDefault()
-        if (Object.values(values).some(v => !v)) return
+        if (Object.values(values).some(v => !v) || values.password !== values['confirm-password']) return
         const newUser = await register({ email: values.email, password: values.password })
         setUser(newUser)
         navigate('/')

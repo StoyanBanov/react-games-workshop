@@ -10,6 +10,8 @@ import { Login } from "./components/Auth/Login/Login";
 import { Create } from "./components/Create/Create";
 import { tokenValue } from "./data/api";
 import { GameEdit } from "./components/Catalog/GameEdit/GameEdit";
+import { LoggedUserRouteGuard } from "./components/common/LoggedUserRouteGuard";
+import { GuestUserRouteGuard } from "./components/common/GuestUserRoutGuard";
 
 function App() {
     const [user, setUser] = useState(null)
@@ -32,18 +34,23 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home games={games.slice(0, 3)} />} />
 
-                    <Route path="catalog" >
-                        <Route index={true} element={<Catalog games={games} />} />
+                    <Route element={<LoggedUserRouteGuard />}>
+                        <Route path="catalog" >
+                            <Route index={true} element={<Catalog games={games} />} />
 
-                        <Route path=":gameId">
-                            <Route index={true} element={<GameDetails user={user} setGames={setGames} />} />
-                            <Route path="edit" element={<GameEdit user={user} setGames={setGames} />} />
+                            <Route path=":gameId">
+                                <Route index={true} element={<GameDetails user={user} setGames={setGames} />} />
+                                <Route path="edit" element={<GameEdit user={user} setGames={setGames} />} />
+                            </Route>
                         </Route>
+
+                        <Route path="/create" element={<Create user={user} setGames={setGames} />} />
                     </Route>
 
-                    <Route path="/create" element={<Create user={user} setGames={setGames} />} />
-                    <Route path="/register" element={<Register user={user} setUser={setUserHandler} />} />
-                    <Route path="/login" element={<Login user={user} setUser={setUserHandler} />} />
+                    <Route element={<GuestUserRouteGuard />}>
+                        <Route path="/register" element={<Register user={user} setUser={setUserHandler} />} />
+                        <Route path="/login" element={<Login user={user} setUser={setUserHandler} />} />
+                    </Route>
                 </Routes>
             </main>
         </div>
